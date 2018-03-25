@@ -1,0 +1,26 @@
+{
+  "name": "tunnel_rush",
+  "version": "1.0.0",
+  "description": "Fun using WebGL",
+  "main": "index.js",
+  "scripts": {
+	"build": "browserify lib/main.js build/build.js",
+	"clean": "rm -rf lib/*.js",
+	"transpile": "coffee --compile --output lib/ src/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "WebGL",
+    "NodeJS",
+    "Javascript",
+    "Game",
+    "TunnelRush"
+  ],
+  "author": "Pratik Jain <pratik.jain0509@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^16.1.1",
+    "coffeescript": "^2.2.3",
+    "watchify": "^3.11.0"
+  }
+}
