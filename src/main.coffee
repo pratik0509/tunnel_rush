@@ -5,7 +5,7 @@ vsSource = '
 	uniform mat4 uProjectionMatrix;
 
 	void main() {
-		gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition
+		gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
 	}'
 
 fsSource = '
@@ -31,17 +31,24 @@ initShaderProgram = (gl, vsSource, fsSource) ->
 
 loadShader = (gl, type, source) ->
 	shader = gl.createShader type
-
+	console.log '1'
 	gl.shaderSource shader, source
-
+	console.log '2'
 	gl.compileShader shader
-
+	console.log '3'
 	if !gl.getShaderParameter shader, gl.COMPILE_STATUS
 		alert 'An error in compiling shaders'
 		gl.deleteShader shader
 		return null
 
 	return shader
+
+canvas = document.querySelector '#glCanvas'
+gl = canvas.getContext 'webgl'
+
+if !gl
+	alert 'Unable to initialize WebGL'
+	return
 
 shaderProgram = initShaderProgram gl, vsSource, fsSource
 
