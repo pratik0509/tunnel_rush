@@ -4,7 +4,7 @@
   "description": "Fun using WebGL",
   "main": "index.js",
   "scripts": {
-	"build": "browserify lib/main.js build/build.js",
+	"build": "browserify -o build/build.js lib/main.js",
 	"clean": "rm -rf lib/*.js",
 	"transpile": "coffee --compile --output lib/ src/",
     "test": "echo \"Error: no test specified\" && exit 1"
