@@ -4,6 +4,9 @@
 sqRotation = 0.0
 deltaTime = 0.1
 
+vsSource = require '../assets/vertexshader.js'
+fsSource = require '../assets/fragmentshader.js'
+
 main = ->
 	canvas = document.querySelector '#glCanvas'
 	gl = canvas.getContext 'webgl'
@@ -11,25 +14,6 @@ main = ->
 	if !gl
 		alert 'Unable to initialize WebGL. Your browser or machine may not support it.'
 		return
-	# Vertex shader program
-	vsSource = '
-		attribute vec4 aVertexPosition;
-		attribute vec4 aVertexColor;
-
-		uniform mat4 uModelViewMatrix;
-		uniform mat4 uProjectionMatrix;
-
-		varying lowp vec4 vColor;
-		void main() {
-			gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-			vColor = aVertexColor;
-		}'
-	# Fragment shader program
-	fsSource = '
-		varying lowp vec4 vColor;
-		void main() {
-			gl_FragColor = vColor;
-		}'
 	# Initialize a shader program; this is where all the lighting
 	# for the vertices and so forth is established.
 	shaderProgram = initShaderProgram(gl, vsSource, fsSource)
@@ -54,6 +38,7 @@ main = ->
 		now *= 0.001
 		delTime = now - prev
 		prev = now
+		initScene gl
 		drawScene gl, programInfo, buffers, delTime
 		requestAnimationFrame render
 
@@ -150,11 +135,12 @@ initBuffers = (gl) ->
 	gl.bufferData gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW
 	{position: positionBuffer, color: colorBuffer, indices: indexBuffer}
 
+
 #
-# Draw the scene.
+# Initialize Scene
 #
 
-drawScene = (gl, programInfo, buffers, deltaTime) ->
+initScene = (gl) ->
 	gl.clearColor 0.0, 0.0, 0.0, 1.0
 	# Clear to black, fully opaque
 	gl.clearDepth 1.0
@@ -165,6 +151,12 @@ drawScene = (gl, programInfo, buffers, deltaTime) ->
 	# Near things obscure far things
 	# Clear the canvas before we start drawing on it.
 	gl.clear gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT
+
+#
+# Draw the scene.
+#
+
+drawScene = (gl, programInfo, buffers, deltaTime) ->
 	# Create a perspective matrix, a special matrix that is
 	# used to simulate the distortion of perspective in a camera.
 	# Our field of view is 45 degrees, with a width/height
