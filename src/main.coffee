@@ -7,8 +7,14 @@ Bar			= require '../lib/bar.js'
 Camera		= require '../lib/camera.js'
 
 DEL_ANG = 0.015
+SCORE = 0.0
+LEVEL = 1
 cam = new Camera()
 cam.translate -0.4
+
+oct = ['tun1.jpg', 'tun2.png', 'tun3.jpg', 'tun4.jpg', 'tun5.jpg', 'tun6.jpg', 'tun7.jpg', 'tun8.jpg']
+br = ['bar1.jpg', 'bar2.jpg', 'bar3.jpg', 'bar4.jpg', 'bar5.jpg', 'bar6.jpg', 'bar7.jpg', 'bar8.jpg']
+num = oct.length
 
 main = ->
 	canvas = document.querySelector '#glCanvas'
@@ -46,8 +52,25 @@ main = ->
 	bars = []
 	bars.push new Bar()
 	bars[0].initBuffers gl
-	textureOct = utils.loadTexture gl, './assets/speckled.jpg'
-	textureBar = utils.loadTexture gl, './assets/wood.jpg'
+
+	i = 0
+	textureOct = utils.loadTexture gl, './assets/none'
+	textureBar = utils.loadTexture gl, './assets/none'
+	func = ->
+		textureOct = utils.loadTexture gl, './assets/' + oct[i % num]
+		textureBar = utils.loadTexture gl, './assets/' + br[i % num]
+		++i
+		++LEVEL
+		return
+
+	establishChange = ->
+		i = 0
+		textureOct = utils.loadTexture gl, './assets/' + oct[i % num]
+		textureBar = utils.loadTexture gl, './assets/' + br[i % num]
+		++i
+		setInterval func, 25 * 1000
+
+	setTimeout establishChange, 3 * 1000
 	addTunnelTrigger = 0
 	addWallTrigger = 0
 	# Draw the scene
@@ -60,6 +83,9 @@ main = ->
 		initScene gl
 		shift = 0
 		i = 0
+		SCORE += LEVEL
+		document.getElementById("level").innerHTML = "LEVEL:  " + LEVEL;
+		document.getElementById("score").innerHTML = "SCORE:  " + SCORE;
 		while i < bars.length
 			pos = bars[i].getPosition()
 			if pos[2] > 3
@@ -69,8 +95,9 @@ main = ->
 			bars[i].translateCoord[2] += 0.03
 			if utils.detectCollision cam, bars[i]
 				console.log 'Game Over!'
-				while true
-					j = 0
+				exit()
+				# while true
+				# 	j = 0
 			++i
 		i = 0
 		while i < tunnels.length
