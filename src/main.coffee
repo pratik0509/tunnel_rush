@@ -2,7 +2,7 @@ utils		= require './utils.js'
 vsSource	= require '../assets/vertexshader.js'
 fsSource	= require '../assets/fragmentshader.js'
 cube		= require '../lib/cube.js'
-tunnel		= require '../lib/tunnel.js'
+Tunnel		= require '../lib/tunnel.js'
 
 main = ->
 	canvas = document.querySelector '#glCanvas'
@@ -29,9 +29,11 @@ main = ->
 			uSampler: gl.getUniformLocation shaderProgram, 'uSampler'
 	# Here's where we call the routine that builds all the
 	# objects we'll be drawing.
-	buffersCube = cube.initBuffers(gl)
-	buffersTunnel = tunnel.initBuffers(gl)
-	textureCube = utils.loadTexture gl, './assets/dark-mosaic.png'
+	# buffersCube = cube.initBuffers(gl)
+	tunnel = new Tunnel()
+	buffersTunnel = tunnel.initBuffers gl
+	# buffersTunnel.push(tunnel.initBuffers(gl))
+	# textureCube = utils.loadTexture gl, './assets/dark-mosaic.png'
 	textureOct = utils.loadTexture gl, './assets/speckled.jpg'
 
 	# Draw the scene
@@ -44,7 +46,11 @@ main = ->
 		initScene gl
 		# cube.drawScene gl, programInfo, buffersCube, textureCube, delTime
 		# cube.drawScene gl, programInfo, buffersCube, textureOct, delTime
+		# for buf in buffersTunnel
 		tunnel.drawScene gl, programInfo, buffersTunnel, textureOct, delTime
+		newPos = tunnel.getPosition()
+		newPos[2] += 0.1
+		tunnel.setPosition(newPos)
 		# tunnel.drawScene gl, programInfo, buffers, delTime
 		requestAnimationFrame render
 
