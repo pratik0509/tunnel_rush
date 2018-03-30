@@ -6,10 +6,13 @@
 # have one object -- a simple two-dimensional square.
 #
 class Tunnel
-	sqRotation = 0.0
-	deltaFactor = 0.5
-	translateCoord = [-0.0, 0.0, -5.0]
-	width = 2
+	constructor: ->
+		@sqRotation = (45.0 / 2.0) * Math.PI / 180.0
+		@deltaFactor = 0.5
+		@translateCoord = [-0.0, 0.0, -5.0]
+		@width = 3
+		@buffers = undefined
+
 	initBuffers: (gl) =>
 
 
@@ -23,9 +26,9 @@ class Tunnel
 		numVertex = 8.0
 		angle = Math.PI * 2 / numVertex
 		positions = []
-		front = -width / 2.0
-		back = +width / 2.0
-		radius = 1
+		front = -@width / 2.0
+		back = +@width / 2.0
+		radius = 0.6
 
 		temp = [radius * Math.cos(0), radius * Math.sin(0), front]
 		positions = positions.concat temp
@@ -135,7 +138,13 @@ class Tunnel
 
 		gl.bufferData gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW
 
-		{position: positionBuffer, color: colorBuffer, indices: indexBuffer, textureCoord: textureCoordBuffer}
+		@buffers =
+			position: positionBuffer
+			color: colorBuffer
+			indices: indexBuffer
+			textureCoord: textureCoordBuffer
+
+		@buffers
 		# {position: positionBuffer, color: colorBuffer, indices: indexBuffer}
 
 
@@ -143,10 +152,10 @@ class Tunnel
 	# Draw the scene.
 	#
 
-	drawScene: (gl, programInfo, buffers, texture, deltaTime) =>
+	drawScene: (gl, programInfo, texture, deltaTime) =>
 		# Create a perspective matrix, a special matrix that is
 		# used to simulate the distortion of perspective in a camera.
-		# Our field of view is 45 degrees, with a width/height
+		# Our field of view is 45 degrees, with a @width/height
 		# ratio that matches the display size of the canvas
 		# and we only want to see objects between 0.1 units
 		# and 100 units away from the camera.
@@ -164,9 +173,9 @@ class Tunnel
 		modelViewMatrix = mat4.create()
 		# Now move the drawing position a bit to where we want to
 		# start drawing the square.
-		mat4.translate modelViewMatrix, modelViewMatrix, translateCoord
-		mat4.rotate modelViewMatrix, modelViewMatrix, sqRotation, [0.0, 0.0, 1.0]
-		# mat4.rotate modelViewMatrix, modelViewMatrix, sqRotation, [0.0, 1.0, 0.0]
+		mat4.translate modelViewMatrix, modelViewMatrix, @translateCoord
+		mat4.rotate modelViewMatrix, modelViewMatrix, @sqRotation, [0.0, 0.0, 1.0]
+		# mat4.rotate modelViewMatrix, modelViewMatrix, @sqRotation, [0.0, 1.0, 0.0]
 		# amount to translate
 		# Tell WebGL how to pull out the positions from the position
 		# buffer into the vertexPosition attribute.
@@ -175,7 +184,7 @@ class Tunnel
 		normalize = false
 		stride = 0
 		offset = 0
-		gl.bindBuffer gl.ARRAY_BUFFER, buffers.position
+		gl.bindBuffer gl.ARRAY_BUFFER, @buffers.position
 		gl.vertexAttribPointer programInfo.attribLocations.vertexPosition, numComponents, type, normalize, stride, offset
 		gl.enableVertexAttribArray programInfo.attribLocations.vertexPosition
 
@@ -187,7 +196,7 @@ class Tunnel
 		normalize = false
 		stride = 0
 		offset = 0
-		gl.bindBuffer gl.ARRAY_BUFFER, buffers.color
+		gl.bindBuffer gl.ARRAY_BUFFER, @buffers.color
 		gl.vertexAttribPointer programInfo.attribLocations.vertexColor, numComponents, type, normalize, stride, offset
 		# Disable for only those which have texture only
 		if texture
@@ -201,11 +210,11 @@ class Tunnel
 		normalize = false
 		stride = 0
 		offset = 0
-		gl.bindBuffer gl.ARRAY_BUFFER, buffers.textureCoord
+		gl.bindBuffer gl.ARRAY_BUFFER, @buffers.textureCoord
 		gl.vertexAttribPointer programInfo.attribLocations.textureCoord, num, type, normalize, stride, offset
 		gl.enableVertexAttribArray programInfo.attribLocations.textureCoord
 
-		gl.bindBuffer gl.ELEMENT_ARRAY_BUFFER, buffers.indices
+		gl.bindBuffer gl.ELEMENT_ARRAY_BUFFER, @buffers.indices
 
 		vertexCount = 48
 		type = gl.UNSIGNED_SHORT
@@ -230,19 +239,19 @@ class Tunnel
 		gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
 		gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
 
-		sqRotation += deltaTime * deltaFactor
+		@sqRotation += deltaTime * @deltaFactor
 		return
 
 
 	setPosition: (pos) =>
 		if pos.length != 3
 			return
-		translateCoord = pos
+		@translateCoord = pos
 
 	getPosition: =>
-		translateCoord
+		@translateCoord
 
 	getWidth: =>
-		width
+		@width
 
 module.exports = Tunnel

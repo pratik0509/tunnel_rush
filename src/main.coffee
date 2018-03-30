@@ -30,12 +30,16 @@ main = ->
 	# Here's where we call the routine that builds all the
 	# objects we'll be drawing.
 	# buffersCube = cube.initBuffers(gl)
-	tunnel = new Tunnel()
-	buffersTunnel = tunnel.initBuffers gl
+	# tunnel = new Tunnel()
+	# buffersTunnel = tunnel.initBuffers gl
+	tunnels = []
+	tunnels.push new Tunnel()
+	tunnels[0].initBuffers gl
+
 	# buffersTunnel.push(tunnel.initBuffers(gl))
 	# textureCube = utils.loadTexture gl, './assets/dark-mosaic.png'
 	textureOct = utils.loadTexture gl, './assets/speckled.jpg'
-
+	addTrigger = 0
 	# Draw the scene
 
 	prev = 0
@@ -47,11 +51,28 @@ main = ->
 		# cube.drawScene gl, programInfo, buffersCube, textureCube, delTime
 		# cube.drawScene gl, programInfo, buffersCube, textureOct, delTime
 		# for buf in buffersTunnel
-		tunnel.drawScene gl, programInfo, buffersTunnel, textureOct, delTime
-		newPos = tunnel.getPosition()
-		newPos[2] += 0.1
-		tunnel.setPosition(newPos)
-		# tunnel.drawScene gl, programInfo, buffers, delTime
+		shift = 0
+		for tunnel in tunnels
+			pos = tunnel.getPosition()
+			if pos[2] > 3
+				++shift
+			tunnel.drawScene gl, programInfo, textureOct, delTime
+			newPos = tunnel.getPosition()
+			newPos[2] += 0.03
+			tunnel.setPosition(newPos)
+		while shift > 0
+			tunnels.shift()
+			--shift
+		if addTrigger == 50
+			tunnels.push new Tunnel()
+			tunnels[tunnels.length - 1].initBuffers gl
+			newPos = tunnels[tunnels.length - 1].getPosition()
+			newPos[2] -= 2 * tunnels[tunnels.length - 1].getWidth()
+			tunnels[tunnels.length - 1].setPosition gl
+			addTrigger = 0
+
+		++addTrigger
+
 		requestAnimationFrame render
 
 	requestAnimationFrame render
