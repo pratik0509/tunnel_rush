@@ -6,6 +6,10 @@ Tunnel		= require '../lib/tunnel.js'
 Bar			= require '../lib/bar.js'
 Camera		= require '../lib/camera.js'
 
+DEL_ANG = 0.015
+cam = new Camera()
+cam.translate -0.4
+
 main = ->
 	canvas = document.querySelector '#glCanvas'
 	gl = canvas.getContext 'webgl'
@@ -33,8 +37,6 @@ main = ->
 	# objects we'll be drawing.
 	# tunnel = new Tunnel()
 	# buffersTunnel = tunnel.initBuffers gl
-	cam = new Camera()
-	cam.translate [0, -0.4, 0]
 
 	tunnels = []
 	tunnels.push new Tunnel()
@@ -50,6 +52,7 @@ main = ->
 	addTunnelTrigger = 0
 	addWallTrigger = 0
 	# Draw the scene
+	# cam.rotate angle, [0, 0.0, 1.0]
 
 	prev = 0
 	render = (now) ->
@@ -157,10 +160,11 @@ loadShader = (gl, type, source) ->
 
 	shader
 
-#
-# Camera Matrix
-#
+Mousetrap.bind 'a', () ->
+	cam.rotate -DEL_ANG
 
+Mousetrap.bind 'd', () ->
+	cam.rotate +DEL_ANG
 
 window.onload = ->
 	main()
