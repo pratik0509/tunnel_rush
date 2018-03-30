@@ -29,8 +29,10 @@ main = ->
 			uSampler: gl.getUniformLocation shaderProgram, 'uSampler'
 	# Here's where we call the routine that builds all the
 	# objects we'll be drawing.
-	buffers = cube.initBuffers(gl)
-	texture = utils.loadTexture gl, './assets/cubetexture.png'
+	buffersCube = cube.initBuffers(gl)
+	buffersTunnel = tunnel.initBuffers(gl)
+	textureCube = utils.loadTexture gl, './assets/dark-mosaic.png'
+	textureOct = utils.loadTexture gl, './assets/best-poly.png'
 
 	# Draw the scene
 
@@ -40,7 +42,9 @@ main = ->
 		delTime = now - prev
 		prev = now
 		initScene gl
-		cube.drawScene gl, programInfo, buffers, texture, delTime
+		# cube.drawScene gl, programInfo, buffersCube, textureCube, delTime
+		# cube.drawScene gl, programInfo, buffersCube, textureOct, delTime
+		tunnel.drawScene gl, programInfo, buffersTunnel, textureOct, delTime
 		# tunnel.drawScene gl, programInfo, buffers, delTime
 		requestAnimationFrame render
 

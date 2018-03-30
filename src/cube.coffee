@@ -222,11 +222,6 @@ drawScene = (gl, programInfo, buffers, texture, deltaTime) ->
 	gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
 
 
-	offset = 0
-	vertexCount = 4
-	gl.drawArrays gl.TRIANGLE_STRIP, offset, vertexCount
-
-
 	sqRotation += deltaTime
 	return
 

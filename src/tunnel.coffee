@@ -1,5 +1,5 @@
 sqRotation = 0.0
-deltaTime = 0.1
+deltaFactor = 0.5
 
 #
 # initBuffers
@@ -9,15 +9,56 @@ deltaTime = 0.1
 #
 
 initBuffers = (gl) ->
+
+
+	# Create a buffer for the square's positions.
+	positionBuffer = gl.createBuffer()
+	# Select the positionBuffer as the one to apply buffer
+	# operations to from here out.
+	gl.bindBuffer gl.ARRAY_BUFFER, positionBuffer
+
+	# Now create an array of positions for the octagon.
+	numVertex = 8.0
+	angle = Math.PI * 2 / numVertex
+	positions = []
+	front = 5
+	back = 2
+	radius = 1
+
+	temp = [radius * Math.cos(0), radius * Math.sin(0), front]
+	positions = positions.concat temp
+	temp = [radius * Math.cos(0), radius * Math.sin(0), back]
+	positions = positions.concat temp
+
+	for i in [1..7]
+		temp = [radius * Math.cos(i * angle), radius * Math.sin(i * angle), front]
+		positions = positions.concat temp
+		temp = [radius * Math.cos(i * angle), radius * Math.sin(i * angle), back]
+		positions = positions.concat temp
+		temp = [radius * Math.cos(i * angle), radius * Math.sin(i * angle), front]
+		positions = positions.concat temp
+		temp = [radius * Math.cos(i * angle), radius * Math.sin(i * angle), back]
+		positions = positions.concat temp
+
+	temp = [radius * Math.cos(0), radius * Math.sin(0), front]
+	positions = positions.concat temp
+	temp = [radius * Math.cos(0), radius * Math.sin(0), back]
+	positions = positions.concat temp
+
+	# Now pass the list of positions into WebGL to build the
+	# shape. We do this by creating a Float32Array from the
+	# JavaScript array, then use it to fill the current buffer.
+	gl.bufferData gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW
+
 	faceColors = [
-		[1.0, 0.5, 0.0, 1.0],			# Front: WHITE
+		[1.0, 1.0, 1.0, 1.0],			# Front: WHITE
 		[1.0, 0.0, 0.0, 1.0],			# Back: RED
 		[0.0, 1.0, 0.0, 1.0],			# Top: GREEN
 		[0.0, 0.0, 1.0, 1.0],			# Bottom: BLUE
 		[1.0, 1.0, 0.0, 1.0],    	# Right face: YELLOW
 		[1.0, 0.0, 1.0, 1.0],    	# Left face: PURPLE
-		[1.0, 0.5, 1.0, 1.0],    	# Left face: PURPLE
-		[0.0, 1.0, 0.7, 1.0],    	# Left face: PURPLE
+		[1.0, 0.0, 1.0, 1.0],    	# Left face: PURPLE
+		[1.0, 0.0, 1.0, 1.0],    	# Left face: PURPLE
 	]
 
 	colors = []
@@ -32,61 +73,75 @@ initBuffers = (gl) ->
 	gl.bindBuffer gl.ELEMENT_ARRAY_BUFFER, indexBuffer
 
 	indices = [
-		0,  1,  2,      0,  2,  3,    # 1
-		4,  5,  6,      4,  6,  7,    # 2
-		8,  9,  10,     8,  10, 11,   # 3
-		12, 13, 14,     12, 14, 15,   # 4
-		16, 17, 18,     16, 18, 19,   # 5
-		20, 21, 22,     20, 22, 23,   # 6
-		24, 25, 26,     24, 26, 27,   # 7
-		28, 29, 30,     28, 30, 31,   # 8
+		0,  1,  2,      1,  2,  3,    # 1
+		4,  5,  6,      5,  6,  7,    # 2
+		8,  9,  10,      9,  10,  11,   # 3
+		12,  13,  14,      13,  14,  15,   # 4
+		16,  17, 18,     17, 18,  19,   # 5
+		20, 21, 22,     21, 22, 23,   # 6
+		24, 25, 26,    25, 26, 27,   # 7
+		28, 29, 30,       29,  30, 31,   # 8
 	]
 
 	gl.bufferData gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW
 
-	# Create a buffer for the square's positions.
-	positionBuffer = gl.createBuffer()
-	# Select the positionBuffer as the one to apply buffer
-	# operations to from here out.
-	gl.bindBuffer gl.ARRAY_BUFFER, positionBuffer
-	# Now create an array of positions for the square.
-	numVertex = 8
-	angle = 2 * Math.PI / numVertex
-	positions = []
+	textureCoordBuffer = gl.createBuffer()
+	gl.bindBuffer gl.ARRAY_BUFFER, textureCoordBuffer
 
-	temp = [Math.cos(0), Math.sin(0), -2.0]
-	positions.concat temp
-	temp = [Math.cos(0), Math.sin(0), -5.0]
-	positions.concat temp
+	textureCoordinates = [
+		 # Front
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		 # Back
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		 # Top
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		# // Bottom
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		# // Right
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		# // Left
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		# // Left
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+		# // Left
+		0.0,  0.0,
+		1.0,  0.0,
+		1.0,  1.0,
+		0.0,  1.0,
+	]
 
-	for i in [1..7]
-		temp = [Math.cos(i * angle), Math.sin(i * angle), -5.0]
-		positions.concat temp
-		temp = [Math.cos(i * angle), Math.sin(i * angle), -2.0]
-		positions.concat temp
-		temp = [Math.cos(i * angle), Math.sin(i * angle), -2.0]
-		positions.concat temp
-		temp = [Math.cos(i * angle), Math.sin(i * angle), -5.0]
-		positions.concat temp
+	gl.bufferData gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW
 
-	temp = [Math.cos(0), Math.sin(0), -5.0]
-	positions.concat temp
-	temp = [Math.cos(0), Math.sin(0), -2.0]
-	positions.concat temp
-
-	# Now pass the list of positions into WebGL to build the
-	# shape. We do this by creating a Float32Array from the
-	# JavaScript array, then use it to fill the current buffer.
-	gl.bufferData gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW
-
-	{position: positionBuffer, color: colorBuffer, indices: indexBuffer}
+	{position: positionBuffer, color: colorBuffer, indices: indexBuffer, textureCoord: textureCoordBuffer}
+	# {position: positionBuffer, color: colorBuffer, indices: indexBuffer}
 
 
 #
 # Draw the scene.
 #
 
-drawScene = (gl, programInfo, buffers, deltaTime) ->
+drawScene = (gl, programInfo, buffers, texture, deltaTime) ->
 	# Create a perspective matrix, a special matrix that is
 	# used to simulate the distortion of perspective in a camera.
 	# Our field of view is 45 degrees, with a width/height
@@ -107,9 +162,9 @@ drawScene = (gl, programInfo, buffers, deltaTime) ->
 	modelViewMatrix = mat4.create()
 	# Now move the drawing position a bit to where we want to
 	# start drawing the square.
-	mat4.translate modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -8.0]
+	mat4.translate modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -5.0]
 	mat4.rotate modelViewMatrix, modelViewMatrix, sqRotation, [0.0, 0.0, 1.0]
-	mat4.rotate modelViewMatrix, modelViewMatrix, sqRotation, [0.0, 1.0, 0.0]
+	# mat4.rotate modelViewMatrix, modelViewMatrix, sqRotation, [0.0, 1.0, 0.0]
 	# amount to translate
 	# Tell WebGL how to pull out the positions from the position
 	# buffer into the vertexPosition attribute.
@@ -132,7 +187,21 @@ drawScene = (gl, programInfo, buffers, deltaTime) ->
 	offset = 0
 	gl.bindBuffer gl.ARRAY_BUFFER, buffers.color
 	gl.vertexAttribPointer programInfo.attribLocations.vertexColor, numComponents, type, normalize, stride, offset
-	gl.enableVertexAttribArray programInfo.attribLocations.vertexColor
+	# Disable for only those which have texture only
+	if texture
+		gl.disableVertexAttribArray programInfo.attribLocations.vertexColor
+		gl.vertexAttrib4f programInfo.attribLocations.vertexColor, 1, 1, 1, 1
+	else
+		gl.enableVertexAttribArray programInfo.attribLocations.vertexColor
+
+	num = 2
+	type = gl.FLOAT
+	normalize = false
+	stride = 0
+	offset = 0
+	gl.bindBuffer gl.ARRAY_BUFFER, buffers.textureCoord
+	gl.vertexAttribPointer programInfo.attribLocations.textureCoord, num, type, normalize, stride, offset
+	gl.enableVertexAttribArray programInfo.attribLocations.textureCoord
 
 	gl.bindBuffer gl.ELEMENT_ARRAY_BUFFER, buffers.indices
 
@@ -140,6 +209,15 @@ drawScene = (gl, programInfo, buffers, deltaTime) ->
 	type = gl.UNSIGNED_SHORT
 	offset = 0
 
+	# Activate texture
+	# Tell WebGL we want to affect texture unit 0
+	gl.activeTexture gl.TEXTURE0
+
+	# Bind the texture to texture unit 0
+	gl.bindTexture gl.TEXTURE_2D, texture
+
+	# Tell the shader we bound the texture to texture unit 0
+	gl.uniform1i programInfo.uniformLocations.uSampler, 0
 
 	gl.drawElements gl.TRIANGLES, vertexCount, type, offset
 
@@ -150,13 +228,13 @@ drawScene = (gl, programInfo, buffers, deltaTime) ->
 	gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
 	gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
 
+	#
+	# offset = 0
+	# vertexCount = 4
+	# gl.drawArrays gl.TRIANGLE_STRIP, offset, vertexCount
+	#
 
-	offset = 0
-	vertexCount = 4
-	gl.drawArrays gl.TRIANGLE_STRIP, offset, vertexCount
-
-
-	sqRotation += deltaTime
+	sqRotation += deltaTime * deltaFactor
 	return
 
 
