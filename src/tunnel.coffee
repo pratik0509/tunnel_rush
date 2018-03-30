@@ -153,7 +153,7 @@ class Tunnel
 	# Draw the scene.
 	#
 
-	drawScene: (gl, programInfo, texture, deltaTime) =>
+	drawScene: (gl, programInfo, texture, deltaTime, cam) =>
 		utils.initDrawScene gl
 		# Create a perspective matrix, a special matrix that is
 		# used to simulate the distortion of perspective in a camera.
@@ -177,7 +177,7 @@ class Tunnel
 		# start drawing the square.
 		mat4.translate modelViewMatrix, modelViewMatrix, @translateCoord
 		mat4.rotate modelViewMatrix, modelViewMatrix, @sqRotation, [0.0, 0.0, 1.0]
-
+		mat4.multiply modelViewMatrix, cam.getViewMatrix(), modelViewMatrix
 		# Tell WebGL to use our program when drawing
 		# Set the shader uniforms
 		gl.useProgram programInfo.program

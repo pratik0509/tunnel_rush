@@ -3,7 +3,8 @@ vsSource	= require '../assets/vertexshader.js'
 fsSource	= require '../assets/fragmentshader.js'
 cube		= require '../lib/cube.js'
 Tunnel		= require '../lib/tunnel.js'
-Bar		= require '../lib/bar.js'
+Bar			= require '../lib/bar.js'
+Camera		= require '../lib/camera.js'
 
 main = ->
 	canvas = document.querySelector '#glCanvas'
@@ -32,6 +33,9 @@ main = ->
 	# objects we'll be drawing.
 	# tunnel = new Tunnel()
 	# buffersTunnel = tunnel.initBuffers gl
+	cam = new Camera()
+	cam.translate [0, -0.4, 0]
+
 	tunnels = []
 	tunnels.push new Tunnel()
 	tunnels[0].initBuffers gl
@@ -53,14 +57,13 @@ main = ->
 		delTime = now - prev
 		prev = now
 		initScene gl
-		# gl.useProgram programInfo.program
 		shift = 0
 		i = 0
 		while i < bars.length
 			pos = bars[i].getPosition()
 			if pos[2] > 3
 				++shift
-			bars[i].drawScene gl, programInfo, textureBar, delTime
+			bars[i].drawScene gl, programInfo, textureBar, delTime, cam
 			newPos = bars[i].getPosition()
 			bars[i].translateCoord[2] += 0.03
 			++i
@@ -69,7 +72,7 @@ main = ->
 			pos = tunnels[i].getPosition()
 			if pos[2] > 5
 				++shift
-			tunnels[i].drawScene gl, programInfo, textureOct, delTime
+			tunnels[i].drawScene gl, programInfo, textureOct, delTime, cam
 			newPos = tunnels[i].getPosition()
 			tunnels[i].translateCoord[2] += 0.03
 			++i
@@ -154,4 +157,10 @@ loadShader = (gl, type, source) ->
 
 	shader
 
-main()
+#
+# Camera Matrix
+#
+
+
+window.onload = ->
+	main()

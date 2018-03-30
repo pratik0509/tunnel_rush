@@ -155,7 +155,7 @@ class Bar
 	# Draw the scene.
 	#
 
-	drawScene: (gl, programInfo, texture, deltaTime) =>
+	drawScene: (gl, programInfo, texture, deltaTime, cam) =>
 		utils.initDrawScene gl
 
 		# Create a perspective matrix, a special matrix that is
@@ -180,6 +180,7 @@ class Bar
 		# start drawing the square.
 		mat4.translate modelViewMatrix, modelViewMatrix, @translateCoord
 		mat4.rotate modelViewMatrix, modelViewMatrix, @sqRotation, [0.0, 0.0, 1.0]
+		mat4.multiply modelViewMatrix, cam.getViewMatrix(), modelViewMatrix
 
 		# Tell WebGL to use our program when drawing
 		# Set the shader uniforms
