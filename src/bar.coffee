@@ -11,7 +11,7 @@ class Bar
 		@sqRotation = (45.0 / 2.0) * Math.PI / 180.0 + Math.random() * 2
 		@deltaFactor = -0.4 - Math.random()
 		@translateCoord = [-0.0, 0.0, -15.0]
-		@width = 3
+		@width = 0.1
 		@buffers = undefined
 
 	initBuffers: (gl) =>

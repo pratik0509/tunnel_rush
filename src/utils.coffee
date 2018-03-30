@@ -45,6 +45,13 @@ isPowerOf2 = (val) ->
 	val & (val - 1) == 0
 
 
+detectCollision = (cam, obstacle) ->
+	temp = Math.abs(cam.angle - obstacle.sqRotation - (Math.PI / 2))
+	while temp > Math.PI
+		temp -= Math.PI
+	(temp <= 1 && Math.abs(obstacle.translateCoord[2] - 0.01) < obstacle.width)
+
 module.exports =
 	loadTexture: loadTexture
 	initDrawScene: initDrawScene
+	detectCollision: detectCollision

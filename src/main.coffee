@@ -33,6 +33,7 @@ main = ->
 			projectionMatrix: gl.getUniformLocation shaderProgram, 'uProjectionMatrix'
 			modelViewMatrix: gl.getUniformLocation shaderProgram, 'uModelViewMatrix'
 			uSampler: gl.getUniformLocation shaderProgram, 'uSampler'
+			# light: gl.getUniformLocation shaderProgram, 'uLight'
 	# Here's where we call the routine that builds all the
 	# objects we'll be drawing.
 	# tunnel = new Tunnel()
@@ -66,6 +67,10 @@ main = ->
 			bars[i].drawScene gl, programInfo, textureBar, delTime, cam
 			newPos = bars[i].getPosition()
 			bars[i].translateCoord[2] += 0.03
+			if utils.detectCollision cam, bars[i]
+				console.log 'Game Over!'
+				while true
+					j = 0
 			++i
 		i = 0
 		while i < tunnels.length
