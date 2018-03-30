@@ -1,3 +1,5 @@
+utils		= require './utils.js'
+
 sqRotation = 0.0
 deltaTime = 0.1
 
@@ -135,6 +137,7 @@ initBuffers = (gl) ->
 #
 
 drawScene = (gl, programInfo, buffers, texture, deltaTime) ->
+	utils.initDrawScene gl
 	# Create a perspective matrix, a special matrix that is
 	# used to simulate the distortion of perspective in a camera.
 	# Our field of view is 45 degrees, with a width/height
@@ -216,7 +219,7 @@ drawScene = (gl, programInfo, buffers, texture, deltaTime) ->
 
 
 	# Tell WebGL to use our program when drawing
-	gl.useProgram programInfo.program
+	# gl.useProgram programInfo.program
 	# Set the shader uniforms
 	gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
 	gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix

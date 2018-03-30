@@ -3,6 +3,7 @@ vsSource	= require '../assets/vertexshader.js'
 fsSource	= require '../assets/fragmentshader.js'
 cube		= require '../lib/cube.js'
 Tunnel		= require '../lib/tunnel.js'
+Bar		= require '../lib/bar.js'
 
 main = ->
 	canvas = document.querySelector '#glCanvas'
@@ -29,17 +30,21 @@ main = ->
 			uSampler: gl.getUniformLocation shaderProgram, 'uSampler'
 	# Here's where we call the routine that builds all the
 	# objects we'll be drawing.
-	# buffersCube = cube.initBuffers(gl)
 	# tunnel = new Tunnel()
 	# buffersTunnel = tunnel.initBuffers gl
 	tunnels = []
 	tunnels.push new Tunnel()
 	tunnels[0].initBuffers gl
 
+	bars = []
+	bars.push new Bar()
+	bars[0].initBuffers gl
 	# buffersTunnel.push(tunnel.initBuffers(gl))
 	# textureCube = utils.loadTexture gl, './assets/dark-mosaic.png'
 	textureOct = utils.loadTexture gl, './assets/speckled.jpg'
-	addTrigger = 0
+	textureBar = utils.loadTexture gl, './assets/wood.jpg'
+	addTunnelTrigger = 0
+	addWallTrigger = 0
 	# Draw the scene
 
 	prev = 0
@@ -48,30 +53,45 @@ main = ->
 		delTime = now - prev
 		prev = now
 		initScene gl
-		# cube.drawScene gl, programInfo, buffersCube, textureCube, delTime
-		# cube.drawScene gl, programInfo, buffersCube, textureOct, delTime
-		# for buf in buffersTunnel
+		# gl.useProgram programInfo.program
 		shift = 0
-		for tunnel in tunnels
-			pos = tunnel.getPosition()
+		i = 0
+		while i < bars.length
+			pos = bars[i].getPosition()
 			if pos[2] > 3
 				++shift
-			tunnel.drawScene gl, programInfo, textureOct, delTime
-			newPos = tunnel.getPosition()
-			newPos[2] += 0.03
-			tunnel.setPosition(newPos)
-		while shift > 0
-			tunnels.shift()
-			--shift
-		if addTrigger == 50
+			bars[i].drawScene gl, programInfo, textureBar, delTime
+			newPos = bars[i].getPosition()
+			bars[i].translateCoord[2] += 0.03
+			++i
+		i = 0
+		while i < tunnels.length
+			pos = tunnels[i].getPosition()
+			if pos[2] > 5
+				++shift
+			tunnels[i].drawScene gl, programInfo, textureOct, delTime
+			newPos = tunnels[i].getPosition()
+			tunnels[i].translateCoord[2] += 0.03
+			++i
+		# while shift > 0
+		# 	tunnels.shift()
+		# 	--shift
+		if addTunnelTrigger == 50
 			tunnels.push new Tunnel()
 			tunnels[tunnels.length - 1].initBuffers gl
 			newPos = tunnels[tunnels.length - 1].getPosition()
-			newPos[2] -= 2 * tunnels[tunnels.length - 1].getWidth()
-			tunnels[tunnels.length - 1].setPosition gl
-			addTrigger = 0
+			newPos[2] -= tunnels[tunnels.length - 1].getWidth()
+			tunnels[tunnels.length - 1].setPosition newPos
+			addTunnelTrigger = 0
 
-		++addTrigger
+		if addWallTrigger == 150
+			bars.push new Bar()
+			bars[bars.length - 1].initBuffers gl
+			addWallTrigger = 0
+
+
+		++addTunnelTrigger
+		++addWallTrigger
 
 		requestAnimationFrame render
 

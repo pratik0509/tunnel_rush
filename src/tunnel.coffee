@@ -1,3 +1,4 @@
+utils		= require './utils.js'
 
 #
 # initBuffers
@@ -9,7 +10,7 @@ class Tunnel
 	constructor: ->
 		@sqRotation = (45.0 / 2.0) * Math.PI / 180.0
 		@deltaFactor = 0.5
-		@translateCoord = [-0.0, 0.0, -5.0]
+		@translateCoord = [-0.0, 0.0, -10.0]
 		@width = 3
 		@buffers = undefined
 
@@ -153,6 +154,7 @@ class Tunnel
 	#
 
 	drawScene: (gl, programInfo, texture, deltaTime) =>
+		utils.initDrawScene gl
 		# Create a perspective matrix, a special matrix that is
 		# used to simulate the distortion of perspective in a camera.
 		# Our field of view is 45 degrees, with a @width/height
@@ -175,6 +177,13 @@ class Tunnel
 		# start drawing the square.
 		mat4.translate modelViewMatrix, modelViewMatrix, @translateCoord
 		mat4.rotate modelViewMatrix, modelViewMatrix, @sqRotation, [0.0, 0.0, 1.0]
+
+		# Tell WebGL to use our program when drawing
+		# Set the shader uniforms
+		gl.useProgram programInfo.program
+		gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
+		gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
+
 		# mat4.rotate modelViewMatrix, modelViewMatrix, @sqRotation, [0.0, 1.0, 0.0]
 		# amount to translate
 		# Tell WebGL how to pull out the positions from the position
@@ -234,10 +243,11 @@ class Tunnel
 
 
 		# Tell WebGL to use our program when drawing
-		gl.useProgram programInfo.program
 		# Set the shader uniforms
-		gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
-		gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
+		# gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
+		# gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
+		# gl.useProgram programInfo.program
+		# gl.deleteProgram()
 
 		@sqRotation += deltaTime * @deltaFactor
 		return
