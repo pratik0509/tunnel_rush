@@ -90,7 +90,7 @@ main = ->
 			pos = bars[i].getPosition()
 			if pos[2] > 3
 				++shift
-			bars[i].drawScene gl, programInfo, textureBar, delTime, cam
+			bars[i].drawScene gl, programInfo, textureBar, delTime * LEVEL / 2.0, cam
 			newPos = bars[i].getPosition()
 			bars[i].translateCoord[2] += 0.03
 			if utils.detectCollision cam, bars[i]
