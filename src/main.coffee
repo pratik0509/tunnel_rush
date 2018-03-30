@@ -32,7 +32,7 @@ main = ->
 	buffersCube = cube.initBuffers(gl)
 	buffersTunnel = tunnel.initBuffers(gl)
 	textureCube = utils.loadTexture gl, './assets/dark-mosaic.png'
-	textureOct = utils.loadTexture gl, './assets/best-poly.png'
+	textureOct = utils.loadTexture gl, './assets/speckled.jpg'
 
 	# Draw the scene
 
