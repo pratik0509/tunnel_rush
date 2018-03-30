@@ -9,7 +9,7 @@ loadTexture = (gl, url) ->
 	border = 0
 	srcFormat = gl.RGBA
 	srcType = gl.UNSIGNED_BYTE
-	pixel = new Uint8Array [0, 0, 255, 255]
+	pixel = new Uint8Array [255, 255, 255, 255]
 	gl.texImage2D gl.TEXTURE_2D, level, internalFormat, width, height, border, srcFormat, srcType, pixel
 	image = new Image()
 

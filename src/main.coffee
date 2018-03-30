@@ -2,6 +2,7 @@ utils		= require './utils.js'
 vsSource	= require '../assets/vertexshader.js'
 fsSource	= require '../assets/fragmentshader.js'
 cube		= require '../lib/cube.js'
+tunnel		= require '../lib/tunnel.js'
 
 main = ->
 	canvas = document.querySelector '#glCanvas'
@@ -40,6 +41,7 @@ main = ->
 		prev = now
 		initScene gl
 		cube.drawScene gl, programInfo, buffers, texture, delTime
+		# tunnel.drawScene gl, programInfo, buffers, delTime
 		requestAnimationFrame render
 
 	requestAnimationFrame render

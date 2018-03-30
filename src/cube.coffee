@@ -173,17 +173,20 @@ drawScene = (gl, programInfo, buffers, texture, deltaTime) ->
 
 
 	# Use colors when drawing
-	# numComponents = 4
-	# type = gl.FLOAT
-	# normalize = false
-	# stride = 0
-	# offset = 0
-	# gl.bindBuffer gl.ARRAY_BUFFER, buffers.color
-	# gl.vertexAttribPointer programInfo.attribLocations.vertexColor, numComponents, type, normalize, stride, offset
-	# gl.enableVertexAttribArray programInfo.attribLocations.vertexColor
+	numComponents = 4
+	type = gl.FLOAT
+	normalize = false
+	stride = 0
+	offset = 0
+	gl.bindBuffer gl.ARRAY_BUFFER, buffers.color
+	gl.vertexAttribPointer programInfo.attribLocations.vertexColor, numComponents, type, normalize, stride, offset
+	# Disable for only those which have texture only
+	if texture
+		gl.disableVertexAttribArray programInfo.attribLocations.vertexColor
+		gl.vertexAttrib4f programInfo.attribLocations.vertexColor, 1, 1, 1, 1
+	else
+		gl.enableVertexAttribArray programInfo.attribLocations.vertexColor
 
-
-	# Use texture
 	num = 2
 	type = gl.FLOAT
 	normalize = false
