@@ -57,14 +57,14 @@ class Tunnel
 		gl.bufferData gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW
 
 		faceColors = [
-			[1.0, 1.0, 1.0, 1.0],			# Front: WHITE
-			[1.0, 0.0, 0.0, 1.0],			# Back: RED
-			[0.0, 1.0, 0.0, 1.0],			# Top: GREEN
-			[0.0, 0.0, 1.0, 1.0],			# Bottom: BLUE
-			[1.0, 1.0, 0.0, 1.0],    	# Right face: YELLOW
-			[1.0, 0.0, 1.0, 1.0],    	# Left face: PURPLE
-			[1.0, 0.0, 1.0, 1.0],    	# Left face: PURPLE
-			[1.0, 0.0, 1.0, 1.0],    	# Left face: PURPLE
+			[0.5, 0.5, 0.5, 1.0],			# Front: WHITE
+			[0.0, 0.1, 0.5, 1.0],    	# Left face: PURPLE
+			[0.5, 0.1, 0.0, 1.0],    	# Right face: YELLOW
+			[0.5, 0.0, 0.0, 1.0],			# Back: RED
+			[0.0, 0.0, 0.5, 1.0],			# Bottom: BLUE
+			[0.5, 0.0, 0.5, 1.0],    	# Left face: PURPLE
+			[0.0, 0.5, 0.0, 1.0],			# Top: GREEN
+			[0.5, 0.1, 0.1, 1.0],    	# Left face: PURPLE
 		]
 
 		colors = []

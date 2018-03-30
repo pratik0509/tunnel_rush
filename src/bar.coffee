@@ -8,8 +8,8 @@ utils		= require './utils.js'
 #
 class Bar
 	constructor: ->
-		@sqRotation = (45.0 / 2.0) * Math.PI / 180.0
-		@deltaFactor = -0.4
+		@sqRotation = (45.0 / 2.0) * Math.PI / 180.0 + Math.random() * 2
+		@deltaFactor = -0.4 - Math.random()
 		@translateCoord = [-0.0, 0.0, -15.0]
 		@width = 3
 		@buffers = undefined

@@ -45,14 +45,11 @@ main = ->
 	bars = []
 	bars.push new Bar()
 	bars[0].initBuffers gl
-	# buffersTunnel.push(tunnel.initBuffers(gl))
-	# textureCube = utils.loadTexture gl, './assets/dark-mosaic.png'
 	textureOct = utils.loadTexture gl, './assets/speckled.jpg'
 	textureBar = utils.loadTexture gl, './assets/wood.jpg'
 	addTunnelTrigger = 0
 	addWallTrigger = 0
 	# Draw the scene
-	# cam.rotate angle, [0, 0.0, 1.0]
 
 	prev = 0
 	render = (now) ->
