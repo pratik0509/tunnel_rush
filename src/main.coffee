@@ -86,6 +86,7 @@ main = ->
 		SCORE += LEVEL
 		document.getElementById("level").innerHTML = "LEVEL:  " + LEVEL;
 		document.getElementById("score").innerHTML = "SCORE:  " + SCORE;
+		cam.jump()
 		while i < bars.length
 			pos = bars[i].getPosition()
 			if pos[2] > 3
@@ -191,9 +192,16 @@ loadShader = (gl, type, source) ->
 
 Mousetrap.bind 'a', () ->
 	cam.rotate -DEL_ANG
+	return
 
 Mousetrap.bind 'd', () ->
 	cam.rotate +DEL_ANG
+	return
+
+Mousetrap.bind 'w', () ->
+	if !cam.isJumping
+		cam.isJumping = true
+	return
 
 window.onload = ->
 	main()
