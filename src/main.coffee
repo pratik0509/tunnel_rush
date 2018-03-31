@@ -13,8 +13,8 @@ LEVEL = 1
 cam = new Camera()
 cam.translate -0.4
 
-oct = ['tun1.jpg', 'tun2.png', 'tun3.jpg', 'tun4.jpg', 'tun5.jpg', 'tun6.jpg', 'tun7.jpg', 'tun8.jpg']
-br = ['bar1.jpg', 'bar2.jpg', 'bar3.jpg', 'bar4.jpg', 'bar5.jpg', 'bar6.jpg', 'bar7.jpg', 'bar8.jpg']
+oct = ['tun1.jpg', 'tun9.jpg', 'tun2.png', 'tun3.jpg', 'tun4.jpg', 'tun5.jpg', 'tun6.jpg', 'tun7.jpg', 'tun8.jpg']
+br = ['bar1.jpg', 'bar9.jpg', 'bar2.jpg', 'bar3.jpg', 'bar4.jpg', 'bar5.jpg', 'bar6.jpg', 'bar7.jpg', 'bar8.jpg']
 num = oct.length
 
 main = ->
@@ -65,22 +65,23 @@ main = ->
 
 	coins = []
 
-	i = 0
+	itr = 0
 	textureGold= utils.loadTexture gl, './assets/gold.jpg'
 	textureOct = utils.loadTexture gl, './assets/none'
 	textureBar = utils.loadTexture gl, './assets/none'
 	func = ->
-		textureOct = utils.loadTexture gl, './assets/' + oct[i % num]
-		textureBar = utils.loadTexture gl, './assets/' + br[i % num]
-		++i
+		++itr
+		console.log 'func', itr
 		++LEVEL
+		textureOct = utils.loadTexture gl, './assets/' + oct[itr % num]
+		textureBar = utils.loadTexture gl, './assets/' + br[itr % num]
 		return
 
 	establishChange = ->
-		i = 0
-		textureOct = utils.loadTexture gl, './assets/' + oct[i % num]
-		textureBar = utils.loadTexture gl, './assets/' + br[i % num]
-		++i
+		itr = 0
+		console.log 'establish', itr
+		textureOct = utils.loadTexture gl, './assets/' + oct[itr % num]
+		textureBar = utils.loadTexture gl, './assets/' + br[itr % num]
 		setInterval func, 25 * 1000
 
 	setTimeout establishChange, 3 * 1000
