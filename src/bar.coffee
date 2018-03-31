@@ -9,7 +9,7 @@ utils		= require './utils.js'
 class Bar
 	constructor: (lvl) ->
 		@sqRotation = (45.0 / 2.0) * Math.PI / 180.0 + Math.random() * 10
-		@deltaFactor = -2.0 * Math.random() * (lvl - 1) + 0.5
+		@deltaFactor = -1.0 * Math.random() * (lvl - 1) + 0.5
 		@translateCoord = [-0.0, 0.0, -15.0]
 		@width = 0.1
 		@buffers = undefined

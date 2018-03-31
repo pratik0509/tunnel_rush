@@ -39,7 +39,16 @@ main = ->
 			projectionMatrix: gl.getUniformLocation shaderProgram, 'uProjectionMatrix'
 			modelViewMatrix: gl.getUniformLocation shaderProgram, 'uModelViewMatrix'
 			uSampler: gl.getUniformLocation shaderProgram, 'uSampler'
-			# light: gl.getUniformLocation shaderProgram, 'uLight'
+			light: gl.getUniformLocation shaderProgram, 'uLight'
+
+	color = 1
+	gl.uniform1i programInfo.uniformLocations.light, color
+
+	Mousetrap.bind 't', () ->
+		color = 1 - color
+		gl.uniform1i programInfo.uniformLocations.light, color
+		return
+
 	# Here's where we call the routine that builds all the
 	# objects we'll be drawing.
 	# tunnel = new Tunnel()
@@ -202,6 +211,7 @@ Mousetrap.bind 'w', () ->
 	if !cam.isJumping
 		cam.isJumping = true
 	return
+
 
 window.onload = ->
 	main()

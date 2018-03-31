@@ -5,10 +5,16 @@ fsSource = `
 	varying highp vec2 vTextureCoord;
 
 	uniform sampler2D uSampler;
-	// uniform lowp float uLight;
+	uniform int uLight;
 
 	void main() {
-		gl_FragColor = texture2D(uSampler, vTextureCoord) * vColor;
+		if (uLight != 0) {
+			gl_FragColor = texture2D(uSampler, vTextureCoord) * vColor;
+		} else {
+			lowp vec4 samp = texture2D(uSampler, vTextureCoord);
+			lowp float gray = 0.2 * samp.r + 0.7 * samp.g + 0.07 * samp.b;
+			gl_FragColor = vec4(gray, gray, gray, 1.0);
+		}
 		// gl_FragColor = vColor;
 	}`;
 
