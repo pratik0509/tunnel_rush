@@ -50,7 +50,7 @@ main = ->
 	tunnels[0].initBuffers gl
 
 	bars = []
-	bars.push new Bar()
+	bars.push new Bar(LEVEL)
 	bars[0].initBuffers gl
 
 	i = 0
@@ -90,12 +90,12 @@ main = ->
 			pos = bars[i].getPosition()
 			if pos[2] > 3
 				++shift
-			bars[i].drawScene gl, programInfo, textureBar, delTime * LEVEL / 2.0, cam
-			newPos = bars[i].getPosition()
-			bars[i].translateCoord[2] += 0.03
+			bars[i].drawScene gl, programInfo, textureBar, delTime * LEVEL, cam
 			if utils.detectCollision cam, bars[i]
 				console.log 'Game Over!'
 				exit()
+			newPos = bars[i].getPosition()
+			bars[i].translateCoord[2] += 0.03
 				# while true
 				# 	j = 0
 			++i
@@ -120,7 +120,7 @@ main = ->
 			addTunnelTrigger = 0
 
 		if addWallTrigger == 150
-			bars.push new Bar()
+			bars.push new Bar(LEVEL)
 			bars[bars.length - 1].initBuffers gl
 			addWallTrigger = 0
 
