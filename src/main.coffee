@@ -55,9 +55,6 @@ main = ->
 
 	# Here's where we call the routine that builds all the
 	# objects we'll be drawing.
-	# tunnel = new Tunnel()
-	# buffersTunnel = tunnel.initBuffers gl
-
 	tunnels = []
 	tunnels.push new Tunnel()
 	tunnels[0].initBuffers gl
@@ -67,8 +64,6 @@ main = ->
 	bars[0].initBuffers gl
 
 	coins = []
-	# coins.push new Coin()
-	# coins[0].initBuffers gl
 
 	i = 0
 	textureGold= utils.loadTexture gl, './assets/gold.jpg'
@@ -103,8 +98,8 @@ main = ->
 	addTunnelTrigger = 0
 	addWallTrigger = 0
 	addCoinTrigger = 0
-	# Draw the scene
 
+	# Draw the scene
 	prev = 0
 	render = (now) ->
 		now *= 0.001
@@ -128,8 +123,6 @@ main = ->
 				exit()
 			newPos = bars[i].getPosition()
 			bars[i].translateCoord[2] += 0.03
-				# while true
-				# 	j = 0
 			++i
 		i = 0
 		while i < tunnels.length
@@ -183,11 +176,9 @@ main = ->
 
 	return
 
-
 #
 # Initialize Scene
 #
-
 initScene = (gl) ->
 	gl.clearColor 0.0, 0.0, 0.0, 1.0
 	# Clear to black, fully opaque
@@ -203,7 +194,6 @@ initScene = (gl) ->
 #
 # Initialize a shader program, so WebGL knows how to draw our data
 #
-
 initShaderProgram = (gl, vsSource, fsSource) ->
 	vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource)
 	fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource)
@@ -223,7 +213,6 @@ initShaderProgram = (gl, vsSource, fsSource) ->
 # creates a shader of the given type, uploads the source and
 # compiles it.
 #
-
 loadShader = (gl, type, source) ->
 	shader = gl.createShader type
 	# Send the source to the shader object

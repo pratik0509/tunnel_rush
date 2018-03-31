@@ -9,7 +9,6 @@ deltaTime = 0.1
 # Initialize the buffers we'll need. For this demo, we just
 # have one object -- a simple two-dimensional square.
 #
-
 initBuffers = (gl) ->
 	faceColors = [
 		[1.0, 1.0, 1.0, 1.0],			# Front: WHITE
@@ -131,11 +130,9 @@ initBuffers = (gl) ->
 
 	{position: positionBuffer, color: colorBuffer, indices: indexBuffer, textureCoord: textureCoordBuffer}
 
-
 #
 # Draw the scene.
 #
-
 drawScene = (gl, programInfo, buffers, texture, deltaTime) ->
 	utils.initDrawScene gl
 	# Create a perspective matrix, a special matrix that is
@@ -172,8 +169,6 @@ drawScene = (gl, programInfo, buffers, texture, deltaTime) ->
 	gl.bindBuffer gl.ARRAY_BUFFER, buffers.position
 	gl.vertexAttribPointer programInfo.attribLocations.vertexPosition, numComponents, type, normalize, stride, offset
 	gl.enableVertexAttribArray programInfo.attribLocations.vertexPosition
-
-
 
 	# Use colors when drawing
 	numComponents = 4
@@ -223,7 +218,6 @@ drawScene = (gl, programInfo, buffers, texture, deltaTime) ->
 	# Set the shader uniforms
 	gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
 	gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
-
 
 	sqRotation += deltaTime
 	return

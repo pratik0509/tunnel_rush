@@ -15,8 +15,6 @@ class Bar
 		@buffers = undefined
 
 	initBuffers: (gl) =>
-
-
 		# Create a buffer for the square's positions.
 		positionBuffer = gl.createBuffer()
 		# Select the positionBuffer as the one to apply buffer
@@ -27,38 +25,32 @@ class Bar
 		twidth = 0.10
 		height = 1.0
 		thick = 0.01
-
 		positions = [
 			# // Front face
 			-twidth, -height,  thick,
 			twidth, -height,  thick,
 			twidth,  height,  thick,
 			-twidth,  height,  thick,
-
 			# // Back face
 			-twidth, -height, -thick,
 			-twidth,  height, -thick,
 			twidth,  height, -thick,
 			twidth, -height, -thick,
-
 			# // Top face
 			-twidth,  height, -thick,
 			-twidth,  height,  thick,
 			twidth,  height,  thick,
 			twidth,  height, -thick,
-
 			# // Bottom face
 			-twidth, -height, -thick,
 			twidth, -height, -thick,
 			twidth, -height,  thick,
 			-twidth, -height,  thick,
-
 			# // Right face
 			twidth, -height, -thick,
 			twidth,  height, -thick,
 			twidth,  height,  thick,
 			twidth, -height,  thick,
-
 			# // Left face
 			-twidth, -height, -thick,
 			-twidth, -height,  thick,
@@ -105,7 +97,6 @@ class Bar
 		textureCoordBuffer = gl.createBuffer()
 		gl.bindBuffer gl.ARRAY_BUFFER, textureCoordBuffer
 
-
 		textureCoordinates = [
 			 # Front
 			0.0,  0.0,
@@ -148,13 +139,10 @@ class Bar
 			textureCoord: textureCoordBuffer
 
 		@buffers
-		# {position: positionBuffer, color: colorBuffer, indices: indexBuffer}
-
 
 	#
 	# Draw the scene.
 	#
-
 	drawScene: (gl, programInfo, texture, deltaTime, cam) =>
 		utils.initDrawScene gl
 
@@ -188,7 +176,6 @@ class Bar
 		gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
 		gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
 
-		# mat4.rotate modelViewMatrix, modelViewMatrix, @sqRotation, [0.0, 1.0, 0.0]
 		# amount to translate
 		# Tell WebGL how to pull out the positions from the position
 		# buffer into the vertexPosition attribute.

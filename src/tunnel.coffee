@@ -15,8 +15,6 @@ class Tunnel
 		@buffers = undefined
 
 	initBuffers: (gl) =>
-
-
 		# Create a buffer for the square's positions.
 		positionBuffer = gl.createBuffer()
 		# Select the positionBuffer as the one to apply buffer
@@ -146,13 +144,10 @@ class Tunnel
 			textureCoord: textureCoordBuffer
 
 		@buffers
-		# {position: positionBuffer, color: colorBuffer, indices: indexBuffer}
-
 
 	#
 	# Draw the scene.
 	#
-
 	drawScene: (gl, programInfo, texture, deltaTime, cam) =>
 		utils.initDrawScene gl
 		# Create a perspective matrix, a special matrix that is
@@ -184,7 +179,6 @@ class Tunnel
 		gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
 		gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
 
-		# mat4.rotate modelViewMatrix, modelViewMatrix, @sqRotation, [0.0, 1.0, 0.0]
 		# amount to translate
 		# Tell WebGL how to pull out the positions from the position
 		# buffer into the vertexPosition attribute.
@@ -196,8 +190,6 @@ class Tunnel
 		gl.bindBuffer gl.ARRAY_BUFFER, @buffers.position
 		gl.vertexAttribPointer programInfo.attribLocations.vertexPosition, numComponents, type, normalize, stride, offset
 		gl.enableVertexAttribArray programInfo.attribLocations.vertexPosition
-
-
 
 		# Use colors when drawing
 		numComponents = 4
@@ -241,17 +233,8 @@ class Tunnel
 
 		gl.drawElements gl.TRIANGLES, vertexCount, type, offset
 
-
-		# Tell WebGL to use our program when drawing
-		# Set the shader uniforms
-		# gl.uniformMatrix4fv programInfo.uniformLocations.projectionMatrix, false, projectionMatrix
-		# gl.uniformMatrix4fv programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix
-		# gl.useProgram programInfo.program
-		# gl.deleteProgram()
-
 		@sqRotation += deltaTime * @deltaFactor
 		return
-
 
 	setPosition: (pos) =>
 		if pos.length != 3
