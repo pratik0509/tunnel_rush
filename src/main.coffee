@@ -4,6 +4,7 @@ fsSource	= require '../assets/fragmentshader.js'
 cube		= require '../lib/cube.js'
 Tunnel		= require '../lib/tunnel.js'
 Bar			= require '../lib/bar.js'
+Coin		= require '../lib/coin.js'
 Camera		= require '../lib/camera.js'
 
 DEL_ANG = 0.015
@@ -65,7 +66,12 @@ main = ->
 	bars.push new Bar(LEVEL)
 	bars[0].initBuffers gl
 
+	coins = []
+	# coins.push new Coin()
+	# coins[0].initBuffers gl
+
 	i = 0
+	textureGold= utils.loadTexture gl, './assets/gold.jpg'
 	textureOct = utils.loadTexture gl, './assets/none'
 	textureBar = utils.loadTexture gl, './assets/none'
 	func = ->
@@ -96,6 +102,7 @@ main = ->
 
 	addTunnelTrigger = 0
 	addWallTrigger = 0
+	addCoinTrigger = 0
 	# Draw the scene
 
 	prev = 0
@@ -104,12 +111,12 @@ main = ->
 		delTime = now - prev
 		prev = now
 		initScene gl
-		shift = 0
-		i = 0
 		SCORE += LEVEL
 		document.getElementById("level").innerHTML = "LEVEL:  " + LEVEL;
 		document.getElementById("score").innerHTML = "SCORE:  " + SCORE;
 		cam.jump()
+		shift = 0
+		i = 0
 		while i < bars.length
 			pos = bars[i].getPosition()
 			if pos[2] > 3
@@ -132,6 +139,18 @@ main = ->
 			newPos = tunnels[i].getPosition()
 			tunnels[i].translateCoord[2] += 0.03
 			++i
+		i = 0
+		while i < coins.length
+			if !coins[i].used && utils.detectCoin cam, coins[i]
+				!coins[i].used = true
+				SCORE += coins[i].points
+			pos = coins[i].getPosition()
+			if pos[2] > 5
+				++shift
+			coins[i].drawScene gl, programInfo, textureGold, delTime, cam
+			newPos = coins[i].getPosition()
+			coins[i].translateCoord[2] += 0.03
+			++i
 		# while shift > 0
 		# 	tunnels.shift()
 		# 	--shift
@@ -148,9 +167,14 @@ main = ->
 			bars[bars.length - 1].initBuffers gl
 			addWallTrigger = 0
 
+		if addCoinTrigger == 500
+			coins.push new Coin()
+			coins[coins.length - 1].initBuffers gl
+			addCoinTrigger = 0
 
 		++addTunnelTrigger
 		++addWallTrigger
+		++addCoinTrigger
 
 		requestAnimationFrame render
 

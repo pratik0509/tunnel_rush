@@ -51,7 +51,15 @@ detectCollision = (cam, obstacle) ->
 		temp -= Math.PI
 	(temp <= 0.5 && Math.abs(obstacle.translateCoord[2] - 0.01) < obstacle.width)
 
+detectCoin = (cam, coin) ->
+	dx = cam.radius * Math.cos(cam.angle) - coin.translateCoord[0]
+	dy = cam.radius * Math.sin(cam.angle) - coin.translateCoord[1]
+	dz = 0 - coin.translateCoord[2]
+	dist = dx * dx + dy * dy + dz * dz
+	return dist < 0.3
+
 module.exports =
 	loadTexture: loadTexture
 	initDrawScene: initDrawScene
 	detectCollision: detectCollision
+	detectCoin: detectCoin
