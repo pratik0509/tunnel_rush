@@ -92,7 +92,7 @@ main = ->
 
 	# Change to get flash effect
 	periodicFlash = ->
-		flash += 0.00
+		flash += 0.0
 		if flash > 1.5
 			flash = 1.0
 		gl.uniform1f programInfo.uniformLocations.flash, flash
@@ -124,6 +124,7 @@ main = ->
 			bars[i].drawScene gl, programInfo, textureBar, delTime * LEVEL, cam
 			if utils.detectCollision cam, bars[i]
 				console.log 'Game Over!'
+				stop()
 				exit()
 			newPos = bars[i].getPosition()
 			bars[i].translateCoord[2] += 0.03
@@ -250,6 +251,10 @@ Mousetrap.bind 'w', () ->
 		cam.isJumping = true
 	return
 
+stop = ->
+	aud = document.getElementById('aud')
+	aud.src = ""
+	return
 
 window.onload = ->
 	main()
