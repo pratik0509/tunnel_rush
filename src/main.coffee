@@ -40,9 +40,12 @@ main = ->
 			modelViewMatrix: gl.getUniformLocation shaderProgram, 'uModelViewMatrix'
 			uSampler: gl.getUniformLocation shaderProgram, 'uSampler'
 			light: gl.getUniformLocation shaderProgram, 'uLight'
+			flash: gl.getUniformLocation shaderProgram, 'uFlash'
 
 	color = 1
+	flash = 1.0
 	gl.uniform1i programInfo.uniformLocations.light, color
+	gl.uniform1f programInfo.uniformLocations.flash, flash
 
 	Mousetrap.bind 't', () ->
 		color = 1 - color
@@ -80,6 +83,17 @@ main = ->
 		setInterval func, 25 * 1000
 
 	setTimeout establishChange, 3 * 1000
+
+	# Change to get flash effect
+	periodicFlash = ->
+		flash += 0.00
+		if flash > 1.5
+			flash = 1.0
+		gl.uniform1f programInfo.uniformLocations.flash, flash
+		return
+
+	setInterval periodicFlash, 200
+
 	addTunnelTrigger = 0
 	addWallTrigger = 0
 	# Draw the scene

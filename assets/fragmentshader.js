@@ -6,13 +6,14 @@ fsSource = `
 
 	uniform sampler2D uSampler;
 	uniform int uLight;
+	uniform lowp float uFlash;
 
 	void main() {
 		if (uLight != 0) {
-			gl_FragColor = texture2D(uSampler, vTextureCoord) * vColor;
+			gl_FragColor = texture2D(uSampler, vTextureCoord) * vColor * uFlash;
 		} else {
 			lowp vec4 samp = texture2D(uSampler, vTextureCoord);
-			lowp float gray = 0.2 * samp.r + 0.7 * samp.g + 0.07 * samp.b;
+			lowp float gray = (0.2 * samp.r + 0.7 * samp.g + 0.07 * samp.b) * uFlash;
 			gl_FragColor = vec4(gray, gray, gray, 1.0);
 		}
 		// gl_FragColor = vColor;
